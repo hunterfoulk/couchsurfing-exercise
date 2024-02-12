@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_URL_NON_POOLING")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id                  Int            @id @default(autoincrement())
+  name                String         @db.VarChar(255)
+  birthday            DateTime?      @db.Date
+  relatedUsers        Relationship[] @relation("relatedUsers")
+  relationshipsAsUser Relationship[] @relation("relationshipsAsUser")
+}
+
+model RelationshipType {
+  id           Int            @id @default(autoincrement())
+  typeName     String         @unique @db.VarChar(50)
+  Relationship Relationship[]
+}
+
+model Relationship {
+  id               Int              @id @default(autoincrement())
+  relationshipType String           @db.VarChar(50)
+  userId           Int?
+  relatedUserId    Int?
+  relatedUser      User?            @relation("relatedUsers", fields: [relatedUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user             User?            @relation("relationshipsAsUser", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  type             RelationshipType @relation(fields: [relationshipType], references: [typeName])
+}
