@@ -47,12 +47,6 @@ export const updateUserBirthdayById = async (
   }
 };
 
-// Find the distance between two users in their relationships
-// 2 users who are directly related through family will return -1
-// 2 users who are friends directly will return 0
-// 2 users User1 and User2 are friends but User3 and User1 are not this should return 1
-// need help here
-
 export const findUsersRelationshipDistance = async (
   userId1: number,
   userId2: number,
